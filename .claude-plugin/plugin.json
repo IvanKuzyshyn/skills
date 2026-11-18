@@ -1,0 +1,15 @@
+{
+  "name": "ivankuzyshyn-skills",
+  "version": "0.0.0",
+  "description": "Ivan Kuzyshyn's agent skills for designing and evaluating services.",
+  "author": {
+    "name": "Ivan Kuzyshyn"
+  },
+  "repository": "https://github.com/IvanKuzyshyn/skills",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "twelve-factor",
+    "architecture"
+  ]
+}

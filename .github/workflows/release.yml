@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # commit version changes, push tags, create GitHub releases
+      pull-requests: write # open the version PR
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - run: npm ci
+
+      # With pending changesets this opens or updates the version PR. After that PR
+      # merges, `changeset publish` tags vX.Y.Z (the package is private, so nothing
+      # goes to npm) and the action creates the GitHub release.
+      - uses: changesets/action@v2
+        with:
+          version-script: npm run version
+          publish-script: npx changeset publish
+          commit-message: Version skills
+          pr-title: Version skills

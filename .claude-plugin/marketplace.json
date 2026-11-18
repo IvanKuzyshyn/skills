@@ -1,0 +1,14 @@
+{
+  "name": "ivankuzyshyn",
+  "owner": {
+    "name": "Ivan Kuzyshyn"
+  },
+  "description": "Ivan Kuzyshyn's agent skills.",
+  "plugins": [
+    {
+      "name": "ivankuzyshyn-skills",
+      "source": "./",
+      "description": "Agent skills for designing and evaluating services."
+    }
+  ]
+}
