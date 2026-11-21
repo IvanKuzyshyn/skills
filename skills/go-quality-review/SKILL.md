@@ -43,6 +43,8 @@ Work area by area. For each requirement decide: **met**, **violated** (with evid
 - Panics and exits: `panic(`, `log.Fatal`, `os.Exit` outside `main`
 - Grab-bag packages: directories named `util`, `utils`, `common`, `helpers`, `misc`, `base`, `shared`
 - Resource handling: `.Body`, `Open(`, `sql.Rows`, `time.After` inside loops, `defer` inside loops
+- Request-driven I/O: `http.Get`/`http.NewRequest`/`net.Dial` whose URL or host comes from the request; `http.Error(w, err.Error()`
+- Nondeterminism and boundaries: `range` over a map feeding output or a sort; `sort.Slice` without a tie-breaker; division by a configurable value; `bufio.Scanner` on external input
 
 Rules for findings:
 
@@ -52,7 +54,18 @@ Rules for findings:
 - **Give the fix**, ideally as a short code snippet. Explain the consequence in concrete terms (what breaks, for whom, when).
 - **Credit what is good.** Note areas that are clearly well done; this calibrates the score and tells the user what to preserve.
 
-### 4. Score
+### 4. Confirm by running
+
+Reading code produces suspicions; running it produces evidence. A confirmed finding is more convincing to the user and protects against false positives, so confirm the findings that matter most. This executes project code, so the same trust rule as `go test` applies.
+
+Work in a temporary copy (`cp -r <module-root> "$(mktemp -d)"`) so nothing you add ends up in the user's tree, and delete it afterwards.
+
+- **Suspected Critical concurrency or resource bugs** (CON-1, CON-2, RES-1): write a small throwaway test that triggers the path. For races, call the code from several goroutines and run with `-race`. For goroutine leaks, compare `runtime.NumGoroutine()` before and after the call (allowing a short settle time). Report the observed result, e.g. "`-race` reports DATA RACE on `store.Orders`" or "goroutines went from 3 to 12 and stayed".
+- **Boundary inputs** (RES-6) for CLIs and services: build the binary or start the handler with `httptest`, then feed edge cases such as empty input, blank or very long lines, missing flags or parameters, zero and negative numbers, and malformed bodies. For libraries, do the same through a throwaway test calling the exported API.
+
+Keep this targeted: a handful of experiments on the highest-severity suspicions, not a test suite. Mark findings as **confirmed** (reproduced) or **from code reading** in the report. If something can't be reproduced, re-read the code before reporting it, and drop or downgrade it if the suspicion doesn't hold.
+
+### 5. Score
 
 Score each area from 10 and deduct per *violated requirement* (not per occurrence):
 
@@ -68,7 +81,7 @@ Floor each area at 0. Then compute the weighted total (0–100):
 |---|---|
 | Error handling (ERR) | 20 |
 | Concurrency (CON) | 15 |
-| Resource & runtime safety (RES) | 15 |
+| Runtime safety & correctness (RES) | 15 |
 | API & package design (API) | 15 |
 | Testing (TST) | 15 |
 | Readability & naming (RDB) | 10 |
@@ -80,7 +93,7 @@ If an area is entirely N/A (e.g. no concurrency at all), drop it and rescale the
 
 Grade: **A** ≥ 90, **B** ≥ 80, **C** ≥ 70, **D** ≥ 60, **F** < 60. Any open Critical finding caps the grade at **C** — a project that can lose data or deadlock is not a B project regardless of polish. A failing build caps the grade at **F**.
 
-### 5. Write the report
+### 6. Write the report
 
 Use this structure:
 
@@ -104,7 +117,7 @@ Go version: <from go.mod> · Tools run: <list> · Tools unavailable: <list>
 
 ### Critical
 #### [CON-2] Goroutine leak in request fan-out
-**Where:** `internal/fetch/fetch.go:42` (and 2 similar sites)
+**Where:** `internal/fetch/fetch.go:42` (and 2 similar sites) · **Confirmed**
 **Problem:** <what is wrong and the concrete consequence>
 **Fix:** <how to fix, with a short snippet>
 

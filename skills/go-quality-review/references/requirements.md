@@ -10,7 +10,7 @@ Each requirement has an ID, a severity, what to check, and why it matters. Sever
 
 1. [Error handling (ERR)](#error-handling-err)
 2. [Concurrency (CON)](#concurrency-con)
-3. [Resource & runtime safety (RES)](#resource--runtime-safety-res)
+3. [Runtime safety & correctness (RES)](#runtime-safety--correctness-res)
 4. [API & package design (API)](#api--package-design-api)
 5. [Testing (TST)](#testing-tst)
 6. [Readability & naming (RDB)](#readability--naming-rdb)
@@ -75,7 +75,7 @@ Each requirement has an ID, a severity, what to check, and why it matters. Sever
 
 ---
 
-## Resource & runtime safety (RES)
+## Runtime safety & correctness (RES)
 
 ### RES-1 · Critical · Acquired resources are released
 **Check:** Files, `http.Response.Body`, `sql.Rows`, `sql.Tx`, network connections, tickers (`time.NewTicker`) without a matching `Close`/`Stop` on every path. `defer x.Close()` placed before the error check on acquisition. `defer` inside a loop that iterates many times.
@@ -86,8 +86,8 @@ Each requirement has an ID, a severity, what to check, and why it matters. Sever
 **Why:** Each is a crash triggered by input or state rather than by a programmer error that tests would catch.
 
 ### RES-3 · Critical · No common security defects
-**Check:** SQL or shell commands built with string concatenation or `fmt.Sprintf` from external input; `math/rand` used for tokens, keys, or IDs that must be unguessable; secrets or credentials hard-coded in source; `InsecureSkipVerify: true` outside tests; user-controlled file paths joined without cleaning/validation; HTML rendered with `text/template`.
-**Why:** These are directly exploitable.
+**Check:** SQL or shell commands built with string concatenation or `fmt.Sprintf` from external input; `math/rand` used for tokens, keys, or IDs that must be unguessable; secrets or credentials hard-coded in source; `InsecureSkipVerify: true` outside tests; user-controlled file paths joined without cleaning/validation; HTML rendered with `text/template`; outbound requests to URLs or hosts taken from client input (SSRF); handlers that read or modify per-user data without an authorization check; internal error text (`err.Error()`) written to HTTP responses; request bodies decoded without a size limit (`http.MaxBytesReader`).
+**Why:** These are directly exploitable. SSRF lets callers reach internal services and cloud metadata endpoints; leaked error text reveals paths, hosts, and queries; unbounded bodies let one request exhaust memory.
 
 ### RES-4 · Major · Network I/O has timeouts
 **Check:** `http.DefaultClient` or `http.Get` in production paths; `http.Client{}` without `Timeout`; `http.Server` without `ReadHeaderTimeout` (and usually `ReadTimeout`/`WriteTimeout`/`IdleTimeout`); `net.Dial` without deadline.
@@ -96,6 +96,10 @@ Each requirement has an ID, a severity, what to check, and why it matters. Sever
 ### RES-5 · Minor · Avoidable allocations in hot paths
 **Check:** Only where a path is clearly performance-sensitive (request handling loops, parsing): repeated string concatenation in loops instead of `strings.Builder`; slices grown in loops when the final size is known; `time.After` inside a `select` in a loop; regexps compiled per call.
 **Why:** These are cheap to fix and add up. Don't flag cold paths — premature optimization reduces clarity for nothing.
+
+### RES-6 · Major · Logic is deterministic and handles boundary inputs
+**Check:** Output that depends on map iteration order or on an unstable sort without a tie-breaker; arithmetic that can divide by zero or overflow for valid configuration (e.g. a rate or size of 0); conversions of floating-point results that may be infinite or NaN into integer types such as `time.Duration`; constructors and exported functions that accept invalid arguments (negative counts, zero limits) and misbehave later instead of rejecting them; empty input, blank lines, or oversized lines (`bufio.Scanner`'s 64 KiB default) treated as fatal or silently mishandled.
+**Why:** These bugs pass happy-path tests and surface only on particular data or configuration, often as wrong output rather than a crash. Upgrade to Critical when the result is data loss, a hang, or a CPU-spinning loop.
 
 ---
 
