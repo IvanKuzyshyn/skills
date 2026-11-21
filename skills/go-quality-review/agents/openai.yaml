@@ -1,0 +1,3 @@
+interface:
+  display_name: "Go Quality Review"
+  short_description: "Score a Go project and rank findings by severity"
