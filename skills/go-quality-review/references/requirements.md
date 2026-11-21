@@ -6,6 +6,8 @@ Each requirement has an ID, a severity, what to check, and why it matters. Sever
 - **Major** — makes the code materially harder to change correctly, or exposes callers to avoidable misuse.
 - **Minor** — friction for readers and maintainers; no direct runtime impact.
 
+Severity weighs how likely a problem is to occur, not only how bad the outcome is. Keep a finding Critical only when normal use or untrusted input can trigger it (ordinary traffic, concurrent requests, input an attacker or user controls). A severe outcome that requires the caller or operator to pass an unusual or invalid configuration (a zero rate, a negative size) is Major. Report the worst-case outcome in the finding text so the reader still sees the risk.
+
 ## Contents
 
 1. [Error handling (ERR)](#error-handling-err)
@@ -99,7 +101,7 @@ Each requirement has an ID, a severity, what to check, and why it matters. Sever
 
 ### RES-6 · Major · Logic is deterministic and handles boundary inputs
 **Check:** Output that depends on map iteration order or on an unstable sort without a tie-breaker; arithmetic that can divide by zero or overflow for valid configuration (e.g. a rate or size of 0); conversions of floating-point results that may be infinite or NaN into integer types such as `time.Duration`; constructors and exported functions that accept invalid arguments (negative counts, zero limits) and misbehave later instead of rejecting them; empty input, blank lines, or oversized lines (`bufio.Scanner`'s 64 KiB default) treated as fatal or silently mishandled.
-**Why:** These bugs pass happy-path tests and surface only on particular data or configuration, often as wrong output rather than a crash. Upgrade to Critical when the result is data loss, a hang, or a CPU-spinning loop.
+**Why:** These bugs pass happy-path tests and surface only on particular data or configuration, often as wrong output rather than a crash. Upgrade to Critical when ordinary input can trigger data loss, a hang, or a CPU-spinning loop; keep it Major when only an unusual or invalid configuration triggers it.
 
 ---
 
