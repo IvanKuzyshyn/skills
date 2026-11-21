@@ -16,7 +16,9 @@
         "Flags error both logged and returned (store.Save or handler)",
         "Flags comparing errors by err.Error() string instead of errors.Is",
         "Gives an explicit verdict that the service is not production-ready (low grade or equivalent)",
-        "Findings cite file:line locations"
+        "Findings cite file:line locations",
+        "Flags SSRF: /prices fetches URLs supplied by the client",
+        "Marks at least one critical concurrency finding (race or goroutine leak) as confirmed by running code"
       ]
     },
     {
@@ -29,7 +31,8 @@
         "Reports no critical or high-severity defects",
         "Does not falsely claim a data race or goroutine leak in the library",
         "Explicitly credits specific strengths (e.g. table-driven tests, context cancellation, mutex discipline, doc comments)",
-        "Findings, if any, cite file:line locations"
+        "Findings, if any, cite file:line locations",
+        "Flags that a rate of 0 (or invalid arguments) makes the wait-time calculation divide by zero"
       ]
     },
     {
@@ -45,7 +48,8 @@
         "Flags naming issues: ParserConfig stutter or RequestId initialism",
         "Flags summarization logic living in main and being untestable",
         "Reports no critical-severity findings and gives a mid-range verdict (not A, not F)",
-        "Findings cite file:line locations"
+        "Findings cite file:line locations",
+        "Flags the nondeterministic top-5 ordering when error counts tie"
       ]
     }
   ]
