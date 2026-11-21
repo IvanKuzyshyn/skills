@@ -1,0 +1,52 @@
+{
+  "skill_name": "go-quality-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Can you review the Go service in evals/go-quality-review/fixtures/orders-api? We're about to put it into production next week and I want to know how solid it is and what to fix first.",
+      "expected_output": "Low grade (D/F or capped at C at most). Critical findings: data race on global Orders map, goroutine leak in fetch.FetchAll on early return, unclosed resp.Body, http.Get without timeout, math/rand tokens, ignored Decode/Encode errors. Major: log-and-return, string-compare errors, log.Fatal in library, utils package, mutable global state.",
+      "files": [],
+      "expectations": [
+        "Identifies the data race on the package-level Orders map written from concurrent HTTP handlers",
+        "Identifies the goroutine leak in fetch.FetchAll when it returns early on the first error (unbuffered channel)",
+        "Flags that resp.Body is never closed in fetch.FetchAll",
+        "Flags HTTP calls/server without timeouts (http.Get default client or ListenAndServe without timeouts)",
+        "Flags math/rand used to generate order IDs/tokens",
+        "Flags ignored errors from json Decode or Encode",
+        "Flags error both logged and returned (store.Save or handler)",
+        "Flags comparing errors by err.Error() string instead of errors.Is",
+        "Gives an explicit verdict that the service is not production-ready (low grade or equivalent)",
+        "Findings cite file:line locations"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I wrote a small rate limiter library at evals/go-quality-review/fixtures/ratelimit and plan to open-source it. How's the code quality? Give me an honest grade.",
+      "expected_output": "High grade (A or B). No critical findings. Few minor findings at most; credits table-driven tests, context use, mutex discipline, docs.",
+      "files": [],
+      "expectations": [
+        "Gives a high overall verdict (grade A or B, or equivalent strongly positive assessment)",
+        "Reports no critical or high-severity defects",
+        "Does not falsely claim a data race or goroutine leak in the library",
+        "Explicitly credits specific strengths (e.g. table-driven tests, context cancellation, mutex discipline, doc comments)",
+        "Findings, if any, cite file:line locations"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "audit the go code in evals/go-quality-review/fixtures/logsum - it's a little log summarizing CLI I hacked together. what should I clean up?",
+      "expected_output": "Mid grade (B/C). No critical findings. Flags: gofmt on main.go, stutter ParserConfig, RequestId initialism, missing doc comments, else after return, %v instead of %w, boolean flag params, copy-paste tests without table, logic in main.",
+      "files": [],
+      "expectations": [
+        "Flags that main.go is not gofmt-formatted",
+        "Flags %v used instead of %w when wrapping the time.Parse error",
+        "Flags the boolean flag parameters of ParseAll (skipBad, debugOnly)",
+        "Flags copy-pasted tests that should be table-driven",
+        "Flags naming issues: ParserConfig stutter or RequestId initialism",
+        "Flags summarization logic living in main and being untestable",
+        "Reports no critical-severity findings and gives a mid-range verdict (not A, not F)",
+        "Findings cite file:line locations"
+      ]
+    }
+  ]
+}
