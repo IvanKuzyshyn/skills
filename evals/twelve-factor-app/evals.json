@@ -1,0 +1,47 @@
+{
+  "skill_name": "twelve-factor-app",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We want to run evals/idiomatic-go/fixtures/orders-api on Kubernetes with several replicas. Can you check it against twelve-factor and tell me what blocks that?",
+      "expected_output": "Evaluate mode table covering all twelve factors. Violations: in-memory Orders map (VI), orders.log written to local disk (VI), hardcoded :8080 listen address (VII/III), no SIGTERM handling or graceful shutdown (IX). Unknown for factors the repo cannot show (V, X). Priority fixes lead with state that breaks horizontal scaling.",
+      "files": [],
+      "expectations": [
+        "Uses evaluate mode and produces a per-factor table with a status for each of the twelve factors",
+        "Flags the package-level Orders map as process-local state that breaks with multiple replicas (Processes)",
+        "Flags writing orders.log to the local filesystem (Processes or Logs)",
+        "Flags the hardcoded :8080 listen address instead of a port from the environment (Port binding or Config)",
+        "Flags the absence of SIGTERM handling / graceful shutdown (Disposability)",
+        "Marks factors the repo cannot show (e.g. build/release/run, dev/prod parity) as Unknown rather than guessing",
+        "Cites file:line for every Partial or Violation",
+        "Priority fixes put the in-memory state ahead of lower-risk items",
+        "Does not drift into general Go code-quality findings (error handling style, naming) unrelated to the factors"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I'm designing a new notifications service: a Python HTTP API that accepts send requests, plus a worker that pulls jobs from a queue and sends email and SMS. It will run on AWS. Help me plan it twelve-factor style.",
+      "expected_output": "Design mode. Asks for missing facts (queue choice, datastore, deployment target such as ECS vs Lambda) or states them as assumptions, then gives a per-factor decision table naming concrete mechanisms, plus tradeoffs.",
+      "files": [],
+      "expectations": [
+        "Uses design mode and produces a per-factor decision table",
+        "Asks about or explicitly flags missing facts (queue, datastore, compute platform) instead of silently assuming them",
+        "Names concrete mechanisms (e.g. specific env vars, a queue service, release-phase migrations) rather than restating the principles",
+        "Treats the API and the worker as separate process types (Concurrency)",
+        "Covers graceful shutdown for the worker, including returning or finishing in-flight jobs (Disposability)",
+        "Lists tradeoffs or open questions"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "/twelve-factor-app How do I make my Go HTTP server finish in-flight requests when Kubernetes sends SIGTERM?",
+      "expected_output": "Direct answer: signal.NotifyContext plus http.Server.Shutdown with a timeout, with a short snippet. No full twelve-factor evaluation table and no question about which mode to use.",
+      "files": [],
+      "expectations": [
+        "Answers directly with a working approach (signal.NotifyContext or signal.Notify plus http.Server.Shutdown with a timeout)",
+        "Does not produce a full twelve-factor evaluation or design table",
+        "Does not ask the user to choose between evaluate and design mode"
+      ]
+    }
+  ]
+}

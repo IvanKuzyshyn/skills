@@ -1,0 +1,16 @@
+[
+  {"query": "can you grade the go code in this repo? we're open-sourcing it next month and I want to know what's embarrassing", "should_trigger": true},
+  {"query": "audit our orders service (it's Go, cmd/server + internal/) — how solid is it and what should we fix first before prod", "should_trigger": true},
+  {"query": "is this go module idiomatic? give me a code-health report for ./pkg/...", "should_trigger": true},
+  {"query": "how maintainable is this golang CLI overall? score it", "should_trigger": true},
+  {"query": "review the packages under internal/billing for go best practices, I inherited this code and don't trust it", "should_trigger": true},
+  {"query": "what's the state of this Go codebase? looking for a senior-level review of error handling, concurrency, tests", "should_trigger": true},
+  {"query": "add a /health endpoint to cmd/server/main.go that returns 200", "should_trigger": false},
+  {"query": "TestParseLine in parser_test.go is failing with index out of range, can you fix it", "should_trigger": false},
+  {"query": "what's the difference between errors.Is and errors.As in go?", "should_trigger": false},
+  {"query": "is `for i := range len(xs)` valid go now or do I need the old form?", "should_trigger": false},
+  {"query": "this handler is slow under load, can you profile and speed up the JSON encoding path", "should_trigger": false},
+  {"query": "audit this rust crate for unsafe usage and code quality", "should_trigger": false},
+  {"query": "is our Go API 12-factor compliant? config, logs, graceful shutdown, statelessness", "should_trigger": false},
+  {"query": "convert this python script to go", "should_trigger": false}
+]
