@@ -1,6 +1,6 @@
 ---
 name: idiomatic-go
-description: Evaluate the quality of a Go (golang) project or package and produce a scored report with severity-ranked findings. Use this whenever the user asks to review, audit, assess, grade, or score Go code, asks "how good is this Go codebase", wants a code-health or maintainability check of a Go repo, is preparing a Go project for production or open-sourcing, or asks whether their code is idiomatic Go, or asks what to improve in their Go service, library, or CLI — even if they don't say "quality review" explicitly.
+description: Evaluate the quality of a Go (golang) project or package and produce a scored report with severity-ranked findings. Use this whenever the user asks to review, audit, assess, grade, or score a Go codebase, module, or package, asks "how good is this Go codebase", wants a code-health or maintainability check of a Go repo, is preparing a Go project for production or open-sourcing and wants to know what to fix, or asks whether their Go project is idiomatic — even if they don't say "quality review" explicitly. Do NOT use for writing or changing Go code, fixing a specific bug or failing test, explaining Go concepts or the standard library, quick questions about a single function or snippet, performance tuning of one code path, or non-Go code. For deployment, config, and operability concerns (env config, statelessness, graceful shutdown, logs) use twelve-factor-app instead.
 ---
 
 # Idiomatic Go
@@ -13,7 +13,9 @@ The aim is a review a senior Go engineer would sign off on: findings that are re
 
 ### 1. Scope the review
 
-- Confirm the target: whole module, a subset of packages, or a diff. Default to the module rooted at the current directory (look for `go.mod`).
+- Confirm the target: whole module, a subset of packages, or a diff. Default to the module rooted at the current directory (look for `go.mod`) without asking; ask only when there is no obvious candidate.
+- If the repo has a `go.work` or several `go.mod` files, review each module separately and score each one; ask which to review if there are more than three.
+- If the target is a single file, a diff, or code pasted into chat with no module, do a lightweight review: skip steps 2, 4 and 5, check the code against the requirements, and report findings without a score or grade. A score computed from a fragment misrepresents the project.
 - Exclude code the project does not own: `vendor/`, `third_party/`, and generated files (header line matching `// Code generated .* DO NOT EDIT.`).
 - Map the layout: list packages (`go list ./...`), find `main` packages, note `internal/` usage, count non-test vs test files. For large modules (>~50 packages), prioritize core domain packages and public API, and state in the report which packages were sampled.
 

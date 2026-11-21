@@ -1,0 +1,14 @@
+[
+  {"query": "is this service twelve-factor? check the repo and tell me what violates it", "should_trigger": true},
+  {"query": "we're moving our node api + worker from a VM to kubernetes, can you audit the codebase for what will break when we run 5 replicas", "should_trigger": true},
+  {"query": "i'm designing a new payments service (go, postgres, redis, deployed on ECS). help me decide how config, migrations, logging and scaling should work", "should_trigger": true},
+  {"query": "cloud readiness review of this django app please, we want to deploy it on heroku-like platforms", "should_trigger": true},
+  {"query": "write the twelve-factor section of our design doc for the notifications service", "should_trigger": true},
+  {"query": "how do I handle SIGTERM in my express server so in-flight requests finish?", "should_trigger": false},
+  {"query": "read DATABASE_URL from env instead of the hardcoded string in db.ts", "should_trigger": false},
+  {"query": "design the postgres schema for orders, line items and refunds", "should_trigger": false},
+  {"query": "help me architect the state management for our react dashboard", "should_trigger": false},
+  {"query": "review the public API of my python SDK, are the method names consistent?", "should_trigger": false},
+  {"query": "grade the go code quality in this repo, error handling and tests mainly", "should_trigger": false},
+  {"query": "set up structured logging with zap in this go service", "should_trigger": false}
+]

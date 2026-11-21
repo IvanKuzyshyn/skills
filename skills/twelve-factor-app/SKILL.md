@@ -1,6 +1,6 @@
 ---
 name: twelve-factor-app
-description: Design or evaluate services against the Twelve-Factor App methodology (codebase, dependencies, config, backing services, build/release/run, processes, port binding, concurrency, disposability, dev/prod parity, logs, admin processes). Use when designing a new service or its architecture, reviewing an existing codebase for deployability, scalability or cloud readiness, or when the user mentions 12-factor, twelve-factor, environment config, stateless processes, graceful shutdown, or log handling.
+description: Design or evaluate deployable services (web apps, APIs, workers, schedulers) against the Twelve-Factor App methodology (codebase, dependencies, config, backing services, build/release/run, processes, port binding, concurrency, disposability, dev/prod parity, logs, admin processes). Use when the user asks for a 12-factor or twelve-factor review, a cloud-readiness, deployability, or horizontal-scaling audit of a service codebase, or is designing how a new service will be configured, deployed, scaled, and operated. Do NOT use for libraries, SDKs, end-user CLIs, mobile, desktop, or front-end-only apps, database schema or API contract design, general code-quality reviews (use idiomatic-go for Go code quality), or a single how-to question such as adding graceful shutdown or reading one setting from env — answer those directly.
 ---
 
 # Twelve-Factor App
@@ -30,7 +30,9 @@ Each line is the rule. Open the reference file only when you need detail: violat
 
 - **Evaluate**: an existing codebase and the user wants a review, audit, or readiness check.
 - **Design**: a new service, or a planned change to how a service is built, configured, deployed or scaled.
-- If the request fits neither clearly, ask which one the user wants.
+- **Targeted question**: the user asks how to satisfy one factor in their service (for example, handling SIGTERM or moving a setting to env). Answer it directly using that factor's reference file; don't run a full evaluation or ask for a mode.
+- If the request fits none of these clearly, ask which one the user wants.
+- If the target is not a deployable service (a library, SDK, end-user CLI, or front-end-only app), say that most factors don't apply and evaluate only the ones that do, such as dependencies and config.
 
 ## Where the result goes
 
