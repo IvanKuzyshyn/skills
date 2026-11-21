@@ -1,9 +1,9 @@
 {
-  "skill_name": "go-quality-review",
+  "skill_name": "idiomatic-go",
   "evals": [
     {
       "id": 1,
-      "prompt": "Can you review the Go service in evals/go-quality-review/fixtures/orders-api? We're about to put it into production next week and I want to know how solid it is and what to fix first.",
+      "prompt": "Can you review the Go service in evals/idiomatic-go/fixtures/orders-api? We're about to put it into production next week and I want to know how solid it is and what to fix first.",
       "expected_output": "Low grade (D/F or capped at C at most). Critical findings: data race on global Orders map, goroutine leak in fetch.FetchAll on early return, unclosed resp.Body, http.Get without timeout, math/rand tokens, ignored Decode/Encode errors. Major: log-and-return, string-compare errors, log.Fatal in library, utils package, mutable global state.",
       "files": [],
       "expectations": [
@@ -23,7 +23,7 @@
     },
     {
       "id": 2,
-      "prompt": "I wrote a small rate limiter library at evals/go-quality-review/fixtures/ratelimit and plan to open-source it. How's the code quality? Give me an honest grade.",
+      "prompt": "I wrote a small rate limiter library at evals/idiomatic-go/fixtures/ratelimit and plan to open-source it. How's the code quality? Give me an honest grade.",
       "expected_output": "High grade (A or B). No critical findings. Few minor findings at most; credits table-driven tests, context use, mutex discipline, docs.",
       "files": [],
       "expectations": [
@@ -37,7 +37,7 @@
     },
     {
       "id": 3,
-      "prompt": "audit the go code in evals/go-quality-review/fixtures/logsum - it's a little log summarizing CLI I hacked together. what should I clean up?",
+      "prompt": "audit the go code in evals/idiomatic-go/fixtures/logsum - it's a little log summarizing CLI I hacked together. what should I clean up?",
       "expected_output": "Mid grade (B/C). No critical findings. Flags: gofmt on main.go, stutter ParserConfig, RequestId initialism, missing doc comments, else after return, %v instead of %w, boolean flag params, copy-paste tests without table, logic in main.",
       "files": [],
       "expectations": [

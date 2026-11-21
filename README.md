@@ -7,7 +7,7 @@ Agent skills in the open [Agent Skills](https://agentskills.io) format. Each ski
 | Skill | What it does |
 |---|---|
 | [twelve-factor-app](skills/twelve-factor-app/SKILL.md) | Design a service, or evaluate an existing codebase, against the [Twelve-Factor App](https://12factor.net) methodology |
-| [go-quality-review](skills/go-quality-review/SKILL.md) | Score a Go project 0–100 and report severity-ranked findings across error handling, concurrency, correctness, API design, testing, readability, and build hygiene |
+| [idiomatic-go](skills/idiomatic-go/SKILL.md) | Score a Go project 0–100 and report severity-ranked findings across error handling, concurrency, correctness, API design, testing, readability, and build hygiene |
 
 ## Install
 
@@ -62,4 +62,4 @@ The repo has one [semver](https://semver.org) version, shared by the plugin and 
 
 `twelve-factor-app` is based on the [Twelve-Factor App](https://github.com/twelve-factor/twelve-factor) community manifesto, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The skill text is an adaptation, with violation signals and patterns added for codebase evaluation.
 
-`go-quality-review` is original work, informed by [Effective Go](https://go.dev/doc/effective_go), [Go Code Review Comments](https://go.dev/wiki/CodeReviewComments), the [Go Proverbs](https://go-proverbs.github.io), and Dave Cheney's [Practical Go](https://dave.cheney.net/practical-go).
+`idiomatic-go` is original work, informed by [Effective Go](https://go.dev/doc/effective_go), [Go Code Review Comments](https://go.dev/wiki/CodeReviewComments), the [Go Proverbs](https://go-proverbs.github.io), and Dave Cheney's [Practical Go](https://dave.cheney.net/practical-go).

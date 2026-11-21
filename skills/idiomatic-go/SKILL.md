@@ -1,9 +1,9 @@
 ---
-name: go-quality-review
-description: Evaluate the quality of a Go (golang) project or package and produce a scored report with severity-ranked findings. Use this whenever the user asks to review, audit, assess, grade, or score Go code, asks "how good is this Go codebase", wants a code-health or maintainability check of a Go repo, is preparing a Go project for production or open-sourcing, or asks what to improve in their Go service, library, or CLI — even if they don't say "quality review" explicitly.
+name: idiomatic-go
+description: Evaluate the quality of a Go (golang) project or package and produce a scored report with severity-ranked findings. Use this whenever the user asks to review, audit, assess, grade, or score Go code, asks "how good is this Go codebase", wants a code-health or maintainability check of a Go repo, is preparing a Go project for production or open-sourcing, or asks whether their code is idiomatic Go, or asks what to improve in their Go service, library, or CLI — even if they don't say "quality review" explicitly.
 ---
 
-# Go Quality Review
+# Idiomatic Go
 
 Assess a Go codebase against a catalog of requirements covering correctness, error handling, concurrency, resource safety, API design, readability, testing, and build hygiene. Produce a report with a 0–100 score and actionable findings.
 
